@@ -2,7 +2,7 @@ import React, { useState }  from 'react'
 import axios from "axios";
 function Signup() {
     const [darkMode, setDarkMode] = useState(false);
-    const Sendreq = async (firstid, secondid, emailid, contactid, passwordid, yearid, skillsid) => {
+    const Sendreq = async (firstid, secondid, emailid, contactid, passwordid, yearid, skillsid , Branchid, Sectionid, aboutid, Usernameid) => {
         
         const firstName = document.getElementById(firstid).value;
         const lastName = document.getElementById(secondid).value;
@@ -11,8 +11,11 @@ function Signup() {
         const password = document.getElementById(passwordid).value;
         const yearOfStudy = document.getElementById(yearid).value;
         const skill = document.getElementById(skillsid).value;
-
-        if (!firstName || !lastName || !email || !contactNo || !password || !yearOfStudy || !skill) {
+        const Branch = document.getElementById(Branchid).value;
+        const Section = document.getElementById(Sectionid).value;
+        const about = document.getElementById(aboutid).value;
+        const Username = document.getElementById(Usernameid).value;
+        if (!firstName || !lastName || !email || !contactNo || !password || !yearOfStudy || !skill || !Branch || !Section || !about || !Username) {
             alert('Please fill in all fields.');
             return;
         }
@@ -34,9 +37,14 @@ function Signup() {
             email,
             FirstName: firstName,
             LastName: lastName,
+            password,
             contactNo,
             skill,
-            yearOfStudy
+            yearOfStudy,
+            Branch,
+            Section,
+            about,
+            Username
         };
 
         try {
@@ -54,7 +62,7 @@ function Signup() {
         }
     };
     return (
-      <div id="Signup" className="flex flex-col justify-center items-center w-full h-[100vh] bg-[#282D2D] px-5">
+      <div id="Signup" className="flex flex-col justify-center items-center w-full h-auto  bg-[#282D2D] px-5">
         <div className=" flex flex-col items-end justify-start  overflow-hidden mb-2 xl:max-w-3xl w-full">
           <div className="flex">
             <h3 className="text-white">Dark Mode : &nbsp;</h3>
@@ -117,6 +125,16 @@ function Signup() {
                 type="email"
                 placeholder="Enter your email"
               />
+              <input id="Usernameid"
+                className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
+                  darkMode
+                    ? "bg-[#302E30] text-white focus:border-white"
+                    : "bg-gray-100 text-black focus:border-black"
+                }`}
+                type="text"
+                placeholder="Enter your Username"
+              />
+              
               <input id="contactid"
 
                 className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
@@ -145,6 +163,33 @@ function Signup() {
                 type="text"
                 placeholder="YearOfStudy"
               />
+              <input id="Branchid"
+                className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
+                  darkMode
+                    ? "bg-[#302E30] text-white focus:border-white"
+                    : "bg-gray-100 text-black focus:border-black"
+                }`}
+                type="text"
+                placeholder="Branch"
+              />
+              <input id="Sectionid"
+                className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
+                  darkMode
+                    ? "bg-[#302E30] text-white focus:border-white"
+                    : "bg-gray-100 text-black focus:border-black"
+                }`}
+                type="text"
+                placeholder="Section"
+              />
+              <textarea id="aboutid"
+                className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
+                  darkMode
+                    ? "bg-[#302E30] text-white focus:border-white"
+                    : "bg-gray-100 text-black focus:border-black"
+                }`}
+                type="text"
+                placeholder="About"
+              />
               <select id="skillsid" className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${
                   darkMode
                     ? "bg-[#302E30] text-white focus:border-white"
@@ -156,7 +201,7 @@ function Signup() {
                 <option value="AR/VR">AR/VR Development</option>
             </select>
               <button onClick={()=>{
-                Sendreq(Sendreq('firstid', 'secondid', 'emailid', 'contactid', 'passwordid', 'yearid', 'skillsid'))
+                Sendreq('firstid', 'secondid', 'emailid', 'contactid', 'passwordid', 'yearid', 'skillsid', 'Branchid', 'Sectionid', 'aboutid','Usernameid')
               }} className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                 <svg
                   className="w-6 h-6 -ml-2"

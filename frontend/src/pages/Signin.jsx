@@ -11,11 +11,10 @@ function Signin() {
   async function verify(){
     try{
       const response = await axios.post("http://localhost:3000/signin",postInputs);
-      const jwt = response.data
-      localStorage.setItem("token",jwt)
+      const jwt = response.data.jwt
+      localStorage.setItem("authorization",jwt)
       console.log(jwt)
       navigate("/first")
-
     }catch(e){
       alert("error")
     }

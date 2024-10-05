@@ -1,11 +1,11 @@
 import React from 'react'
 
-function First() {
+function TopPage() {
   return (
     <div>
-      first
+      
     </div>
   )
 }
 
-export default First
+export default TopPage

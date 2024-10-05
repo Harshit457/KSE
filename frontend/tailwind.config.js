@@ -2,7 +2,11 @@
 export default {
   content: ['./src/*.{js,jsx}', './src/**/*.{js,jsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        homebg: "#D4DEEB"
+      }
+    },
   },
   plugins: [
     function ({ addUtilities }) {
