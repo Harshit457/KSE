@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 async function main() {
-    await mongoose.connect('mongodb+srv://saini457harshit:MBoqQfosGf7PZ3gS@cluster0.c3wmu.mongodb.net/');
+    await mongoose.connect('Your mongo dl URl');
 }
 main()
 const userSchema = new mongoose.Schema({
@@ -54,6 +55,37 @@ const userSchema = new mongoose.Schema({
   
 });
 
-const User = mongoose.model('User', userSchema);
+  const postschem = new mongoose.Schema({
+    index: {
+      type: Number
+    }
+    ,
+    Development : {
+      type: String,
+      required: true,
+      enum: ['Web Developer', 'Android Developer', 'AR/VR', 'UI/UX', 'Other'], 
+    },
+    Creditoffering: {
+      type: Number,
+      required: true
+    },
+    Description: {
+      type: String,
+      required: true
+    },
+    mail: {
+      type: String,
+      required: true,
+    },
+    requirements: {
+      type: String,
+      required: true,
+    }
+  })
+  postschem.plugin(AutoIncrement, {inc_field: 'index', start_seq:1})
+  const User = mongoose.model('User', userSchema);
+  const Query1 = mongoose.model('Query1', postschem);
+  module.exports = {
+    User,Query1
+  };
 
-module.exports = User;

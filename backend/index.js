@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express();
 const cors = require('cors');
-const User = require("./db")
+const {User , Query1} = require("./db")
+
 const { sign, verify } = require("jsonwebtoken");
 router.use(express.json());
 router.use(cors())
@@ -48,36 +49,48 @@ router.post('/signin',async (req,res)=>{
         return res.status(404).json({ message: 'Email not found' });
     }
     const jwt = await sign({id: user.id},"harshit")
+    
     return res.json({
-        jwt
+        jwt,
+        username: user.Username
     })
     }catch(e){
-
-    }
-})
-router.use("/first/profile/*",async (req,res,next)=>{
-    const authHeader = req.header("authorization") || "";
-    
-    try{
-        const user = await verify(authHeader,"harshit");
-        if(user){
-            res.set("userId",user.id);
-            next();
-        }
-        else{
-            res.status(403);
-           return res.json({
-                message: "you are not logged in"
+        console.log(e)
+            return res.status(500).json({
+                msg: "server errr"
             })
-        }
-    }catch(e){
-        res.status(403);
-        return res.json({
-            message: "you are not logged in"
-        })
     }
 })
-router.get("/first/profile/:username",async (req,res)=>{
+
+
+router.use("/signin/*", async (req, res, next) => {
+    // Get the 'Authorization' header
+    const authHeader = req.header("Authorization");
+    
+    // Check if it exists and starts with 'Bearer'
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.slice(7); // Remove 'Bearer ' prefix to extract the token
+        
+        try {
+            // Verify the JWT token
+            const user = await verify(token, "harshit");
+            if (user) {
+                // Set userId from token
+                res.set("userId", user.id);
+                next(); // Proceed to the next middleware or route
+            } else {
+                res.status(403).json({ message: "Invalid token" });
+            }
+        } catch (e) {
+            res.status(403).json({ message: "Invalid or expired token" });
+        }
+    } else {
+        res.status(403).json({ message: "Authorization token missing or malformed" });
+    }
+});
+
+router.get("/signin/first/profile/:username",async (req,res)=>{
+    
     const username = req.params.username;
     try{
         const profile = await User.findOne({Username: username})
@@ -102,4 +115,45 @@ router.get("/first/profile/:username",async (req,res)=>{
         res.status(500).send('Server error');
     }
 })
+
+router.post("/signin/first/post",async (req,res)=>{
+    
+        const {Development , Creditoffering , Description, mail , requirements } = req.body;
+        try{
+            const newpost = new Query1({
+                Development: Development,
+                Creditoffering: Creditoffering,
+                Description: Description,
+                mail: mail,
+                requirements: requirements
+            })
+            await newpost.save()
+            return res.json({
+                msg: "post"
+            })
+        }catch (error) {
+            console.error('Error during making post:', error);
+            res.status(500).json({ message: 'Server error. Please try again later.' });
+        }
+})
+router.get('/signin/first/post/query', async (req, res) => {
+    
+    const limit = parseInt(req.query.limit) || 10; // Default limit to 10
+    const skip = parseInt(req.query.skip) || 0; // Default skip to 0
+  
+    try {
+      const queries = await Query1.find()
+        .limit(limit)
+        .skip(skip)
+        .exec();
+  
+      res.json(queries); // Send back the queried data
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+
+
 router.listen(3000);
